@@ -3,11 +3,12 @@ package main
 import (
 	"context"
 	"fmt"
-	opentracing "github.com/opentracing/opentracing-go"
+	"github.com/opentracing/opentracing-go"
 	"github.com/opentracing/opentracing-go/log"
 	"github.com/uber/jaeger-client-go"
 	"github.com/uber/jaeger-client-go/config"
 	"io"
+	"time"
 )
 
 // initJaeger returns an instance of Jaeger Tracer that samples 100% of traces and logs all spans to stdout.
@@ -31,21 +32,26 @@ func initJaeger(service string) (opentracing.Tracer, io.Closer) {
 
 func main() {
 
-	tracer, closer := initJaeger("hello-world")
-	defer closer.Close()
+	for {
 
-	opentracing.SetGlobalTracer(tracer)
+		tracer, closer := initJaeger("hello-world")
+		defer closer.Close()
 
-	span := tracer.StartSpan("say-hello")
-	defer span.Finish()
+		opentracing.SetGlobalTracer(tracer)
 
-	ctx := opentracing.ContextWithSpan(context.Background(), span)
+		span := tracer.StartSpan("say-hello")
+		defer span.Finish()
 
-	helloStr := formatString(ctx, "Ehsan")
+		ctx := opentracing.ContextWithSpan(context.Background(), span)
 
-	span.SetTag("hello-to", "Ehsan")
+		helloStr := formatString(ctx, "Ehsan")
 
-	printHello(ctx, helloStr)
+		span.SetTag("hello-to", "Ehsan")
+
+		printHello(ctx, helloStr)
+
+		time.Sleep(10 * time.Second)
+	}
 }
 
 func formatString(ctx context.Context, helloTo string) string {

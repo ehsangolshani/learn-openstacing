@@ -76,6 +76,7 @@
   analyzer-version = 1
   input-imports = [
     "github.com/opentracing/opentracing-go",
+    "github.com/opentracing/opentracing-go/log",
     "github.com/uber/jaeger-client-go",
     "github.com/uber/jaeger-client-go/config",
   ]
