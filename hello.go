@@ -27,6 +27,8 @@ func initJaeger(service string) (opentracing.Tracer, io.Closer) {
 		panic(fmt.Sprintf("ERROR: cannot init Jaeger: %v\n", err))
 	}
 
+
+
 	return tracer, closer
 }
 
@@ -51,7 +53,7 @@ func main() {
 		span.Finish()
 		_ = closer.Close()
 
-		time.Sleep(10 * time.Second)
+		time.Sleep(10 * time.Millisecond)
 	}
 }
 
