@@ -35,7 +35,6 @@ func main() {
 	for {
 
 		tracer, closer := initJaeger("hello-world")
-		defer closer.Close()
 
 		opentracing.SetGlobalTracer(tracer)
 
@@ -50,6 +49,7 @@ func main() {
 		printHello(ctx, helloStr)
 
 		span.Finish()
+		_ = closer.Close()
 
 		time.Sleep(10 * time.Second)
 	}
