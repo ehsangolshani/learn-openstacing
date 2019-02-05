@@ -40,7 +40,6 @@ func main() {
 		opentracing.SetGlobalTracer(tracer)
 
 		span := tracer.StartSpan("say-hello")
-		defer span.Finish()
 
 		ctx := opentracing.ContextWithSpan(context.Background(), span)
 
@@ -49,6 +48,8 @@ func main() {
 		span.SetTag("hello-to", "Ehsan")
 
 		printHello(ctx, helloStr)
+
+		span.Finish()
 
 		time.Sleep(10 * time.Second)
 	}
